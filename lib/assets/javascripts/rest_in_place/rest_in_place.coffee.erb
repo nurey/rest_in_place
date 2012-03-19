@@ -93,6 +93,9 @@ class RestInPlaceEditor
   # Name of the attribute on the object. Combined with the object name to build
   # query string parameters in the form `object[attribute]`, just as Rails
   # expects it.
+  #
+  # **data-class / @cssClass**
+  # Name of the css class to use for the html inputs
   initOptions : ->
     @$element.parents().each (index, parent) =>
       @url           = @url           || $(parent).attr("data-url")
@@ -107,6 +110,7 @@ class RestInPlaceEditor
     @formType      = @$element.attr("data-formtype")  || @formType || "input"
     @objectName    = @$element.attr("data-object")    || @objectName
     @attributeName = @$element.attr("data-attribute") || @attributeName
+    @cssClass      = @$element.attr("data-class")     || @cssClass
     
   # Overwrites formtype specific method implementations during initialization
   bindForm : ->
@@ -166,7 +170,7 @@ class RestInPlaceEditor
 RestInPlaceEditor.forms = 
   "input" :
     activateForm : ->
-      @$element.html("""<form action="javascript:void(0)" style="display:inline;"><input type="text" value="#{$.trim(@oldValue)}" class="rest-in-place-#{@attributeName}"></form>""")
+      @$element.html("""<form action="javascript:void(0)" style="display:inline;"><input type="text" value="#{$.trim(@oldValue)}" class="rest-in-place-#{@attributeName} #{@cssClass}"></form>""")
       @$element.find('input')[0].select()
       @$element.find("form").submit =>
         @update()
@@ -178,7 +182,7 @@ RestInPlaceEditor.forms =
   
   "textarea" :
     activateForm : ->
-      @$element.html("""<form action="javascript:void(0)" style="display:inline;"><textarea class="rest-in-place-#{@attributeName}">#{$.trim(@oldValue)}</textarea></form>""")
+      @$element.html("""<form action="javascript:void(0)" style="display:inline;"><textarea class="rest-in-place-#{@attributeName} #{@cssClass}">#{$.trim(@oldValue)}</textarea></form>""")
       @$element.find('textarea')[0].select()
       @$element.find("textarea").blur => @update()
 
